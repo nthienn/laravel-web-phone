@@ -39,7 +39,7 @@
                                     <tr>
                                         <td>{{ $key+1 }}</td>
                                         <td>{{ $category->tendanhmuc }}</td>
-                                        <td><img src="{{ asset('uploads/categories/'.$category->image) }}" width="60px"></td>
+                                        <td><img src="{{ asset('uploads/categories/'.$category->hinhanh) }}" width="60px"></td>
                                         <td>
                                             <a href="{{ route('categories.edit',[$category->id_danhmuc]) }}" class="btn btn-default">Sửa</a>
                                             <form action="{{ route('categories.destroy',[$category->id_danhmuc]) }}" method="POST">
