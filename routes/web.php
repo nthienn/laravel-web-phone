@@ -24,44 +24,59 @@ use App\Http\Controllers\OrderSeller;
 
 
 // home
-Route::get('/', [HomeController::class, 'home']);
-Route::get('/category/{name}/{id}', [HomeController::class, 'category'])->name('category');
-Route::get('/product-detail/{id}', [HomeController::class, 'productDetail'])->name('product-detail');
-Route::get('/search', [HomeController::class, 'search'])->name('search');
+Route::controller(HomeController::class)->group(function () {
+    Route::get('/', 'home');
+    Route::get('/category/{name}/{id}', 'category')->name('category');
+    Route::get('/product-detail/{id}', 'productDetail')->name('product-detail');
+    Route::get('/search', 'search')->name('search');
+});
 
 // cart
-Route::get('/cart', [CartController::class, 'cart'])->name('cart');
-Route::get('/save-cart/{id}', [CartController::class, 'saveCart'])->name('save-cart');
-Route::get('/remove/{id}', [CartController::class, 'remove'])->name('remove');
-Route::get('/remove-all', [CartController::class, 'removeAll'])->name('remove-all');
-Route::post('/order', [CartController::class, 'order'])->name('order');
+Route::controller(CartController::class)->group(function () {
+    Route::get('/cart', 'cart')->name('cart');
+    Route::get('/save-cart/{id}', 'saveCart')->name('save-cart');
+    Route::get('/remove/{id}', 'remove')->name('remove');
+    Route::get('/remove-all', 'removeAll')->name('remove-all');
+    Route::post('/order', 'order')->name('order');
+});
+
 
 // product
 Route::resource('/product', ProductController::class);
 
-// order
-Route::get('/order-seller', [OrderSeller::class, 'orderSeller'])->name('order-seller');
-Route::get('/order-detail-seller/{id}', [OrderSeller::class, 'orderDetailSeller'])->name('order-detail-seller');
-Route::put('/update-order/{id}', [OrderSeller::class, 'updateOrder'])->name('update-order');
+// order seller
+Route::controller(OrderSeller::class)->group(function () {
+    Route::get('/order-seller', 'orderSeller')->name('order-seller');
+    Route::get('/order-detail-seller/{id}', 'orderDetailSeller')->name('order-detail-seller');
+    Route::put('/update-order/{id}', 'updateOrder')->name('update-order');
+});
+
 
 // user
-Route::resource('/user', UserController::class);
-Route::get('/user-login', [UserController::class, 'login'])->name('user-login');
-Route::post('/user-login', [UserController::class, 'postLogin'])->name('user-login');
-Route::get('/user-logout', [UserController::class, 'logout'])->name('user-logout');
-Route::get('/change-password', [UserController::class, 'changePass'])->name('change-password');
-Route::put('/update-password', [UserController::class, 'updatePass'])->name('update-password');
-Route::post('/comment/{id}', [UserController::class, 'comment'])->name('comment');
-Route::get('/delete-comment/{id}', [UserController::class, 'deleteComment'])->name('delete-comment');
+Route::controller(UserController::class)->group(function () {
+    Route::resource('/user');
+    Route::get('/user-login', 'login')->name('user-login');
+    Route::post('/user-login', 'postLogin')->name('user-login');
+    Route::get('/user-logout', 'logout')->name('user-logout');
+    Route::get('/change-password', 'changePass')->name('change-password');
+    Route::put('/update-password', 'updatePass')->name('update-password');
+    Route::post('/comment/{id}', 'comment')->name('comment');
+    Route::get('/delete-comment/{id}', 'deleteComment')->name('delete-comment');
+});
 
-Route::get('/order-history', [OrderUser::class, 'orderHistory'])->name('order-history');
-Route::get('/order-detail/{id}', [OrderUser::class, 'orderDetail'])->name('order-detail');
+// order user
+Route::controller(OrderUser::class)->group(function () {
+    Route::get('/order-history', 'orderHistory')->name('order-history');
+    Route::get('/order-detail/{id}', 'orderDetail')->name('order-detail');
+});
 
 // admin
-Route::get('/admin', [AdminController::class, 'home']);
-Route::post('/login', [AdminController::class, 'login'])->name('login');
-Route::get('/logout', [AdminController::class, 'logout'])->name('logout');
+Route::controller(AdminController::class)->group(function () {
+    Route::get('/admin', 'home');
+    Route::post('/login', 'login')->name('login');
+    Route::get('/logout', 'logout')->name('logout');
+    Route::resource('/profile');
+});
 
-Route::resource('/profile', AdminController::class);
 Route::resource('/categories', CategoryController::class);
 Route::resource('/users', UsersController::class);
